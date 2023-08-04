@@ -1,0 +1,320 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<body style="background-color:{{background}};">
+     <a href="/"><svg xmlns="http://www.w3.org/2000/svg" height="2.5em" viewBox="0 0 576 512" class="ms-3 mt-2"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#1d6ffc}</style><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg></a>
+    <div class="mx-5">
+        <div class="mx-5 my-3">
+            <div class="mx-5 row round p-2 shadow-lg bg-white">
+                <div class="col-lg-4 round {{ sidebar }} text-white round p-5">
+                    <div class="row mb-3">
+                        <div class="col-4 text-center">
+                            <span class="badge text-bg-{{btn}} text-light rounded-pill mb-5 badge-transition" id="badge1" style="font-size:20px;"> 1 </span>
+                        </div>
+                        <div class="col-8">
+                            <div class="row">
+                                <strong style="font-size:18px;">Step 1</strong>
+                            </div>
+                            <div class="row">
+                                <small style="font-size:12px;"> Sales Detail</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <span class="badge bg-transparent border border-3 border-{{btn}} rounded-pill mb-5 badge-transition" id="badge2" style="font-size:20px;"> 2 </span>
+                        </div>
+                        <div class="col-8">
+                            <div class="row">
+                                <strong style="font-size:18px;">Step 2</strong>
+                            </div>
+                            <div class="row">
+                                <small style="font-size:12px;">Customer Detail</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <span class="badge bg-transparent border border-3 border-{{btn}} rounded-pill mb-5 badge-transition" id="badge3" style="font-size:20px;"> 3 </span>
+                        </div>
+                        <div class="col-8">
+                            <div class="row">
+                                <strong style="font-size:18px;">Step 3</strong>
+                            </div>
+                            <div class="row">
+                                <small style="font-size:12px;">Submit</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <form method="POST" class="form-group" novalidate>
+                        {{ form.csrf_token }}
+                        <div class="px-5 pt-4 mx-3 round form-transition" id="form1">
+                                <div class="row mb-4">
+                                    <p class="display-5"><b>Sales Information</b></p>
+                                    <br>
+                                    <small class="text-secondary">Enter all the details about the sale, customer and communications</small>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="form-label">Name Of Company</label>
+                                    {% if form.company_name.errors %}
+                                        {{ form.company_name(class="form-control ms-2 shadow-sm is-invalid", placeholder="current_user.entity")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.company_name.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.company_name(class="form-control ms-2 shadow-sm", placeholder=current_user.entity)}}
+                                    {% endif %}
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="form-label">Country</label>
+                                    {% if form.country.errors %}
+                                        {{ form.country(class="form-control ms-2 shadow-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.country.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.country(class="form-control ms-2 shadow-sm")}}
+                                    {% endif %}
+                                </div>
+                                <div class="row mb-5">
+                                    <label class="form-label">Mode Of Communication</label>
+                                    {% if form.communication.errors %}
+                                        {{ form.communication(class="form-control ms-2 shadow-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.communication.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.communication(class="form-control ms-2 shadow-sm")}}
+                                    {% endif %}
+                                </div>
+                                <div class="row">
+                                    <a class="btn btn-{{ colour }} ms-2 shadow-sm" id="nextStepBtn"> Next Step</a>
+                                </div>
+                        </div>
+                        <div class="px-5 pt-4 mx-3 round form-transition" style="display: none;" id="form2">
+                                <div class="row mb-3">
+                                    <p class="display-5"><b>Customer Information</b></p>
+                                    <br>
+                                    <small class="text-secondary">Enter all the details about the sale, customer and communications</small>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="form-label">SalesPerson Name at BPO</label>
+                                    {% if form.sales_name.errors %}
+                                        {{ form.sales_name(class="form-control ms-2 shadow-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.sales_name.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.sales_name(class="form-control ms-2 shadow-sm")}}
+                                    {% endif %}
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="form-label" id="companyNameCallSelect">Company Name Call</label>
+                                    {% if form.name_call.errors %}
+                                        {{ form.name_call(class="form-control ms-2 shadow-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.name_call.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.name_call(class="form-control ms-2 shadow-sm")}}
+                                    {% endif %}
+                                </div>
+                                <div class="row" id="conversationInput">
+                                    <label class="form-label">Conversation</label>
+                                    {% if form.conversation.errors %}
+                                        {{ form.conversation(class="form-control ms-2 shadow-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.conversation.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.conversation(class="form-control ms-2 shadow-sm")}}
+                                    {% endif %}
+                                </div>
+                                <div class="row mt-2 d-none" id="response">
+                                    <label class="form-label">Enter Customer Response</label>
+                                    {% if form.response.errors %}
+                                        {{ form.response(class="form-control ms-2 shadow-sm is-invalid", rows="3")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.response.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.response(class="form-control ms-2 shadow-sm", rows="3")}}
+                                    {% endif %}
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-6 px-5">
+                                        <a class="btn btn-{{ colour }} ms-2 shadow-sm" id="prevStepBtn"> Previous Step</a>
+                                    </div>
+                                    <div class="col-6 px-5">
+                                        {{ form.submit(class="btn btn-" + colour +" ms-2 shadow-sm")}}
+                                    </div>
+                                </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if colour == "danger" %}
+    <script>
+        const form1 = document.getElementById("form1");
+        const form2 = document.getElementById("form2");
+        const badge1 = document.getElementById("badge1");
+        const badge2 = document.getElementById("badge2");
+        const nextStepBtn = document.getElementById("nextStepBtn");
+        const previousStepBtn = document.getElementById("prevStepBtn");
+        const companyNameCallSelect = document.getElementById("name_call");
+        const conversationSelect = document.getElementById("conversation");
+        const responseInput = document.getElementById("response");
+
+        nextStepBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            badge1.classList.remove("text-bg-danger", "text-light");
+            badge1.classList.add("bg-transparent", "border", "border-3", "border-danger");
+
+            badge2.classList.remove("bg-transparent", "border", "border-3", "border-danger");
+            badge2.classList.add("text-bg-danger", "text-light");
+
+            form1.classList.add("fade-out");
+            form2.classList.add("fade-in");
+
+            // Wait for the fade-out animation to complete before hiding the first form
+            setTimeout(() => {
+                form1.style.display = "none"; // Hide the first form
+                form1.classList.remove("fade-out");
+            }, 500); // Set the timeout to match the transition duration (0.5 seconds in this case)
+
+            // Show the second form after the fade-out animation completes
+            setTimeout(() => {
+                form2.style.display = "block"; // Show the second form
+            }, 500); // Set the timeout to match the transition duration (0.5 seconds in this case)
+        });
+
+        previousStepBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            badge2.classList.remove("text-bg-danger", "text-light");
+            badge2.classList.add("bg-transparent", "border", "border-3", "border-danger");
+
+            badge1.classList.remove("bg-transparent", "border", "border-3", "border-danger");
+            badge1.classList.add("text-bg-danger", "text-light");
+
+            form2.classList.add("fade-out");
+            form1.classList.add("fade-in");
+
+            // Wait for the fade-out animation to complete before hiding the second form
+            setTimeout(() => {
+                form2.style.display = "none"; // Hide the second form
+                form2.classList.remove("fade-out");
+            }, 500); // Set the timeout to match the transition duration (0.5 seconds in this case)
+
+            // Show the first form after the fade-out animation completes
+            setTimeout(() => {
+                form1.style.display = "block"; // Show the first form
+            }, 500); // Set the timeout to match the transition duration (0.5 seconds in this case)
+        });
+
+
+        conversationSelect.addEventListener("change", function () {
+            const selectedOption = conversationSelect.value;
+
+            if (selectedOption === "We both have communicated") {
+                responseInput.classList.remove("d-none");
+            } else {
+                responseInput.classList.add("d-none");
+            }
+        });
+    </script>
+    {% else %}
+    <script>
+        const form1 = document.getElementById("form1");
+        const form2 = document.getElementById("form2");
+        const badge1 = document.getElementById("badge1");
+        const badge2 = document.getElementById("badge2");
+        const nextStepBtn = document.getElementById("nextStepBtn");
+        const previousStepBtn = document.getElementById("prevStepBtn");
+        const companyNameCallSelect = document.getElementById("name_call");
+        const conversationSelect = document.getElementById("conversation");
+        const responseInput = document.getElementById("response");
+
+        nextStepBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            badge1.classList.remove("text-bg-info", "text-light");
+            badge1.classList.add("bg-transparent", "border", "border-3", "border-info");
+
+            badge2.classList.remove("bg-transparent", "border", "border-3", "border-info");
+            badge2.classList.add("text-bg-info", "text-light");
+
+            form1.classList.add("fade-out");
+            form2.classList.add("fade-in");
+
+            // Wait for the fade-out animation to complete before hiding the first form
+            setTimeout(() => {
+                form1.style.display = "none"; // Hide the first form
+                form1.classList.remove("fade-out");
+            }, 500); // Set the timeout to match the transition duration (0.5 seconds in this case)
+
+            // Show the second form after the fade-out animation completes
+            setTimeout(() => {
+                form2.style.display = "block"; // Show the second form
+            }, 500); // Set the timeout to match the transition duration (0.5 seconds in this case)
+        });
+
+        previousStepBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            badge2.classList.remove("text-bg-info", "text-light");
+            badge2.classList.add("bg-transparent", "border", "border-3", "border-info");
+
+            badge1.classList.remove("bg-transparent", "border", "border-3", "border-info");
+            badge1.classList.add("text-bg-info", "text-light");
+
+            form2.classList.add("fade-out");
+            form1.classList.add("fade-in");
+
+            // Wait for the fade-out animation to complete before hiding the second form
+            setTimeout(() => {
+                form2.style.display = "none"; // Hide the second form
+                form2.classList.remove("fade-out");
+            }, 500); // Set the timeout to match the transition duration (0.5 seconds in this case)
+
+            // Show the first form after the fade-out animation completes
+            setTimeout(() => {
+                form1.style.display = "block"; // Show the first form
+            }, 500); // Set the timeout to match the transition duration (0.5 seconds in this case)
+        });
+
+
+        conversationSelect.addEventListener("change", function () {
+            const selectedOption = conversationSelect.value;
+
+            if (selectedOption === "We both have communicated") {
+                responseInput.classList.remove("d-none");
+            } else {
+                responseInput.classList.add("d-none");
+            }
+        });
+    </script>
+    {% endif %}
+</body>
+{% endblock %}

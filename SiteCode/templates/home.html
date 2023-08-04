@@ -1,0 +1,124 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <body>
+      <nav class="navbar navbar-expand-sm bg-body-tertiary px-3" style="height: 70px;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Sales Information</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                {% if current_user.role != 2 %}
+                  <a class="nav-link disabled" aria-disabled="true">Admin Dashboard</a>
+                {% else %}
+                  <a class="nav-link" href="/partneradmin">Admin Dashboard</a>
+                {% endif %}
+              </li>
+              {% if current_user.role != 2 %}
+                <li class="nav-item">
+                  <a class="nav-link" href="/updateprogress">Update Progress</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/updatepartner">Update Partner</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="/upload">Upload Files</a>
+                </li>
+              {% endif %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  View Information
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/viewinfo/Partners">Partners</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="/viewinfo/Progress">Progress</a></li>
+                  {% if current_user.role != 2 %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/viewleads">Leads</a></li>
+                  {% endif %}
+                </ul>
+              </li>
+            </ul>
+            <a href="/logout" class="btn btn-outline-{{ colour }}">Logout</a>
+          </div>
+        </div>
+      </nav>
+      <div class="row p-4">
+        <div class="col-7 px-3">
+          <div class="border round p-3">
+
+            {% for message in get_flashed_messages() %}
+              <div class="alert alert-success">
+                {{ message }}
+              </div>
+            {% endfor %}
+
+            <h1 class="text-center"> Admin Content</h1>
+            <hr>
+
+            {% for message in content_messages %}
+              <div class="mb-2 ms-1">
+                <span class="me-2"><b>{{ message.salesperson.username }}</b></span>
+                <small class="text-muted"> {{ message.salesperson.email}} </small>
+              </div>
+              <div class="alert alert-light" style="border-width:1.5px;">
+                {{ message.message }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="col-5 py-4 px-5 round border">
+          {% if current_user.role == 2 %}
+            <h2 class="mb-3"> Enter Your Messages</h2>
+            <form method="POST" class="form-group">
+              {{ form.csrf_token }}
+              <label class="form-label"> {{ form.daily.label }} </label>
+              {% if form.daily.errors %}
+                {{ form.daily(class="form-control is-invalid") }}
+                {% for error in form.daily.errors %}
+                  <div class="invalid-feedback mb-3">
+                    <span>{{ error }}</span>
+                  </div>
+                {% endfor %}
+              {% else %}
+                {{ form.daily(class="form-control mb-3") }}
+              {% endif %}
+
+              <label class="form-label"> {{ form.content.label }} </label>
+              {% if form.content.errors %}
+                {{ form.content(class="form-control is-invalid", rows="5") }}
+                {% for error in form.content.errors %}
+                  <div class="invalid-feedback mb-3">
+                    <span>{{ error }}</span>
+                  </div>
+                {% endfor %}
+              {% else %}
+                {{ form.content(class="form-control mb-3", rows="5") }}
+              {% endif %}
+
+              {{ form.submit(class="btn btn-outline-success") }}
+            </form>
+          {% else %}
+            <h2>Admin Daily Messages</h2>
+            <hr class="mb-4">
+              {% for message in daily_messages %}
+                <div class="alert alert-info">
+                  <div>
+                    <span class="me-1"><b>{{ message.salesperson.username}}</b></span>
+                    <small class="text-muted">{{ message.salesperson.email }}</small>
+                  </div>
+                  <hr class="mb-2">
+                  <span>{{ message.message }}</span>
+                </div>
+
+              {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </body>
+{% endblock %}

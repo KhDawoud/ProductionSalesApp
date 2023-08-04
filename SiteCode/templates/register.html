@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<body>
+  <div class="mx-5 my-3">
+    <div class="row border round shadow">
+      <div class="col-md-7">
+        <div class="text-center mt-5">
+          <h2><b>Enter Your User Information</b></h2>
+        </div>
+        <form class="form-group py-4 px-5" method="POST" novalidate>
+          {{ form.csrf_token }}
+          <label>Username</label>
+          {% if form.username.errors %}
+            {{ form.username(class="form-control shadow-sm is-invalid")}}
+            {% for error in form.username.errors %}
+              <div class="invalid-feedback mb-2">
+                <span>{{ error }}</span>
+              </div>
+            {% endfor %}
+          {% else %}
+            {{ form.username(class="form-control shadow-sm mb-4")}}
+          {% endif %}
+
+          <label>Email</label>
+          {% if form.email.errors %}
+            {{ form.email(class="form-control shadow-sm is-invalid")}}
+            {% for error in form.email.errors %}
+              <div class="invalid-feedback mb-2">
+                <span>{{ error }}</span>
+              </div>
+            {% endfor %}
+          {% else %}
+            {{ form.email(class="form-control shadow-sm mb-4")}}
+          {% endif %}
+
+          <label>Password</label>
+          {% if form.password.errors %}
+            {{ form.password(class="form-control shadow-sm is-invalid")}}
+            {% for error in form.password.errors %}
+              <div class="invalid-feedback mb-3">
+                <span>{{ error }}</span>
+              </div>
+            {% endfor %}
+          {% else %}
+            {{ form.password(class="form-control shadow-sm mb-5")}}
+          {% endif %}
+          <div class="d-flex align-items-center">
+            {{ form.submit(class="gradient-button2 shadow")}}
+          </div>
+        </form>
+      </div>
+      <div class="col-md-5 light-blue-gradient d-flex align-items-center justify-content-center">
+        <div class="row">
+          <div class="text-center">
+            <h2 class="text-white"><b>Sign Up</b></h2>
+          </div>
+          <div class="px-5 mt-3">
+            <span class="text-white">Create your account to be able to access and update your progress info, partner info and more!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}

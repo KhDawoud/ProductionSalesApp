@@ -1,0 +1,203 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<body>
+    <div class="row px-5 pt-5 text-center">
+        <h5 class="text-{{colour}}"> Data For {{ user.entity }}</h5>
+        <h1>View Your Current Progress</h1>
+    </div>
+    <div class="row text-center m-3">
+        <div class="btn-group">
+            <button type="button" class="btn {{c}}" id="progressBtn">Progress Information</button>
+            <button type="button" class="btn {{d}}" id="partnerBtn">Partner Information</button>
+        </div>
+    </div>
+    <div class="row mx-5 px-3 {{a}}" id="progressTableDiv">
+        <table class="table table-hover table-bordered">
+            <thead>
+                {% for header in headings %}
+                    <th scope="col"> {{ header }} </th>
+                {% endfor %}
+            </thead>
+            <tbody>
+                {% for data in progress %}
+                    <tr>
+                        <td> {{ data.salesperson.username }} </td>
+                        <td> {{ data.date }} </td>
+                        <td> {{ data.company_name }} </td>
+                        <td> {{ data.country }} </td>
+                        <td> {{ data.communication }} </td>
+                        <td> {{ data.bpo }} </td>
+                        <td> {{ data.name_call }} </td>
+                        <td> {{ data.conversation }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="row mx-5 px-3 {{b}}" id="partnerTableDiv">
+        <table class="table table-hover table-bordered">
+            <thead>
+                {% for header in p_headings %}
+                    <th scope="col"> {{ header }} </th>
+                {% endfor %}
+            </thead>
+            <tbody>
+                {% for p in partner %}
+                    <tr>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.date }}</td>
+                        <td>{{ p.email }}</td>
+                        <td>{{ p.skype }}</td>
+                        <td>{{ p.relation }}</td>
+                        <td>{{ p.destinations }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if colour == "primary" %}
+        <script>
+            // Get references to the button and table divs
+            const progressBtn = document.getElementById('progressBtn');
+            const partnerBtn = document.getElementById('partnerBtn');
+            const progressTableDiv = document.getElementById('progressTableDiv');
+            const partnerTableDiv = document.getElementById('partnerTableDiv');
+            const titleElement = document.querySelector('h1'); // Get the title element
+
+            // Function to toggle the tables with sliding animation
+            function toggleTablesWithAnimation(showProgress) {
+                const tableToHide = showProgress ? partnerTableDiv : progressTableDiv;
+                const tableToShow = showProgress ? progressTableDiv : partnerTableDiv;
+
+                tableToHide.classList.add('table-slide-exit');
+                tableToHide.classList.remove('table-slide-enter-active');
+                tableToHide.classList.remove('table-slide-exit-active');
+
+                tableToShow.classList.remove('d-none'); // Show the table before sliding in
+
+                tableToShow.classList.add('table-slide-enter');
+                tableToShow.classList.remove('table-slide-enter-active');
+                tableToShow.classList.remove('table-slide-exit-active');
+
+                // This forces a repaint, allowing the animation to trigger
+                void tableToHide.offsetWidth;
+                void tableToShow.offsetWidth;
+
+                tableToHide.classList.add('table-slide-exit-active');
+                tableToHide.classList.remove('table-slide-exit');
+
+                tableToShow.classList.add('table-slide-enter-active');
+                tableToShow.classList.remove('table-slide-enter');
+
+                setTimeout(() => {
+                    tableToHide.classList.add('d-none'); // Hide the table after sliding out
+                }, 300); // Match the duration of the transition in CSS (0.3s = 300ms)
+
+                // Update button classes based on the active table
+                if (showProgress) {
+                    progressBtn.classList.add('btn-primary');
+                    progressBtn.classList.remove('btn-outline-primary');
+                    partnerBtn.classList.remove('btn-primary');
+                    partnerBtn.classList.add('btn-outline-primary');
+
+                    // Update the title text
+                    titleElement.textContent = 'View Your Current Progress';
+                } else {
+                    partnerBtn.classList.add('btn-primary');
+                    partnerBtn.classList.remove('btn-outline-primary');
+                    progressBtn.classList.remove('btn-primary');
+                    progressBtn.classList.add('btn-outline-primary');
+
+                    // Update the title text
+                    titleElement.textContent = 'View Company Partners';
+                }
+            }
+
+            // Add event listeners to the buttons
+            progressBtn.addEventListener('click', function () {
+                // Show the progress table, hide the partner table
+                toggleTablesWithAnimation(true);
+            });
+
+            partnerBtn.addEventListener('click', function () {
+                // Show the partner table, hide the progress table
+                toggleTablesWithAnimation(false);
+            });
+        </script>
+    {% else %}
+        <script>
+            // Get references to the button and table divs
+            const progressBtn = document.getElementById('progressBtn');
+            const partnerBtn = document.getElementById('partnerBtn');
+            const progressTableDiv = document.getElementById('progressTableDiv');
+            const partnerTableDiv = document.getElementById('partnerTableDiv');
+            const titleElement = document.querySelector('h1'); // Get the title element
+
+            // Function to toggle the tables with sliding animation
+            function toggleTablesWithAnimation(showProgress) {
+                const tableToHide = showProgress ? partnerTableDiv : progressTableDiv;
+                const tableToShow = showProgress ? progressTableDiv : partnerTableDiv;
+
+                tableToHide.classList.add('table-slide-exit');
+                tableToHide.classList.remove('table-slide-enter-active');
+                tableToHide.classList.remove('table-slide-exit-active');
+
+                tableToShow.classList.remove('d-none'); // Show the table before sliding in
+
+                tableToShow.classList.add('table-slide-enter');
+                tableToShow.classList.remove('table-slide-enter-active');
+                tableToShow.classList.remove('table-slide-exit-active');
+
+                // This forces a repaint, allowing the animation to trigger
+                void tableToHide.offsetWidth;
+                void tableToShow.offsetWidth;
+
+                tableToHide.classList.add('table-slide-exit-active');
+                tableToHide.classList.remove('table-slide-exit');
+
+                tableToShow.classList.add('table-slide-enter-active');
+                tableToShow.classList.remove('table-slide-enter');
+
+                setTimeout(() => {
+                    tableToHide.classList.add('d-none'); // Hide the table after sliding out
+                }, 300); // Match the duration of the transition in CSS (0.3s = 300ms)
+
+                // Update button classes based on the active table
+                if (showProgress) {
+                    progressBtn.classList.add('btn-danger');
+                    progressBtn.classList.remove('btn-outline-danger');
+                    partnerBtn.classList.remove('btn-danger');
+                    partnerBtn.classList.add('btn-outline-danger');
+
+                    // Update the title text
+                    titleElement.textContent = 'View Your Current Progress';
+                } else {
+                    partnerBtn.classList.add('btn-danger');
+                    partnerBtn.classList.remove('btn-outline-danger');
+                    progressBtn.classList.remove('btn-danger');
+                    progressBtn.classList.add('btn-outline-danger');
+
+                    // Update the title text
+                    titleElement.textContent = 'View Company Partners';
+                }
+            }
+
+            // Add event listeners to the buttons
+            progressBtn.addEventListener('click', function () {
+                // Show the progress table, hide the partner table
+                toggleTablesWithAnimation(true);
+            });
+
+            partnerBtn.addEventListener('click', function () {
+                // Show the partner table, hide the progress table
+                toggleTablesWithAnimation(false);
+            });
+        </script>
+    {% endif %}
+    <div class="home2">
+        <a href="/"><svg xmlns="http://www.w3.org/2000/svg" height="2.5em" viewBox="0 0 576 512" class="ms-3 mt-2"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#1d6ffc}</style><path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg></a>
+    </div>
+</body>
+{% endblock %}
