@@ -19,6 +19,7 @@ class SalesPerson(db.Model, UserMixin):
     daily_messages = db.relationship('DailyMessage', back_populates='salesperson', lazy=True)
     content_messages = db.relationship('ContentMessage', back_populates='salesperson', lazy=True)
     lead = db.Column(db.String(120), unique=True, nullable=True)
+    partner = db.relationship('Partner', back_populates='salesperson', lazy=True)
 
     def __repr__(self):
         return f"<SalesPerson(id={self.id}, username='{self.username}', email='{self.email}', entity='{self.entity}')>"
@@ -50,6 +51,8 @@ class Partner(db.Model):
     relation = db.Column(db.String(30), nullable=False)
     destinations = db.Column(db.Text, nullable=False)
     entity = db.Column(db.String(50), nullable=False)
+    salesperson_id = db.Column(db.Integer, db.ForeignKey('sales_person.id'), nullable=False)
+    salesperson = db.relationship('SalesPerson', back_populates='partner')
 
     def __repr__(self):
         return f"Partner(name='{self.name}', email='{self.email}', skype='{self.skype}'," \
@@ -62,6 +65,7 @@ class DailyMessage(db.Model):
     message = db.Column(db.Text, nullable=False)
     salesperson_id = db.Column(db.Integer, db.ForeignKey('sales_person.id'), nullable=False)
     salesperson = db.relationship('SalesPerson', back_populates='daily_messages')
+    companies = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
         return f"<DailyMessage(id={self.id}, date='{self.date}', message='{self.message}')>"
@@ -73,6 +77,7 @@ class ContentMessage(db.Model):
     message = db.Column(db.Text, nullable=False)
     salesperson_id = db.Column(db.Integer, db.ForeignKey('sales_person.id'), nullable=False)
     salesperson = db.relationship('SalesPerson', back_populates='content_messages')
+    companies = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
         return f"<ContentMessage(id={self.id}, date='{self.date}', message='{self.message}')>"

@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
-
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
+{% endblock %}
 {% block content %}
 <body>
     <div class="row px-5 pt-5 text-center">
@@ -12,8 +14,31 @@
             <button type="button" class="btn {{d}}" id="partnerBtn">Partner Information</button>
         </div>
     </div>
+
     <div class="row mx-5 px-3 {{a}}" id="progressTableDiv">
-        <table class="table table-hover table-bordered">
+        {% if user.role == 2 %}
+            <h3 class="mt-3"> Summary </h3>
+            <hr>
+            <table class="table table-hover table-bordered" id="tb3">
+                <thead>
+                    <th> Username</th>
+                    <th> Communication Count</th>
+                    <th> Has Live Partner</th>
+                </thead>
+                <tbody>
+                    {% for s in summary %}
+                        <tr>
+                            <td> {{s[0]}} </td>
+                            <td> {{s[1]}} </td>
+                            <td> {{s[2]}} </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3 class="mt-3"> Table </h3>
+            <hr>
+        {% endif %}
+        <table class="table table-hover table-bordered" id="tb2">
             <thead>
                 {% for header in headings %}
                     <th scope="col"> {{ header }} </th>
@@ -36,7 +61,7 @@
         </table>
     </div>
     <div class="row mx-5 px-3 {{b}}" id="partnerTableDiv">
-        <table class="table table-hover table-bordered">
+        <table class="table table-hover table-bordered" id="tb">
             <thead>
                 {% for header in p_headings %}
                     <th scope="col"> {{ header }} </th>
@@ -45,6 +70,8 @@
             <tbody>
                 {% for p in partner %}
                     <tr>
+                        <td>{{ p.salesperson.username }}</td>
+                        <td></td>
                         <td>{{ p.name }}</td>
                         <td>{{ p.date }}</td>
                         <td>{{ p.email }}</td>
@@ -56,7 +83,9 @@
             </tbody>
         </table>
     </div>
-
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
     {% if colour == "primary" %}
         <script>
             // Get references to the button and table divs
@@ -125,6 +154,19 @@
                 // Show the partner table, hide the progress table
                 toggleTablesWithAnimation(false);
             });
+
+            $(document).ready(function () {
+              $('#tb').DataTable();
+            });
+
+            $(document).ready(function () {
+              $('#tb2').DataTable();
+            });
+
+            $(document).ready(function () {
+              $('#tb3').DataTable();
+            });
+
         </script>
     {% else %}
         <script>
@@ -193,6 +235,18 @@
             partnerBtn.addEventListener('click', function () {
                 // Show the partner table, hide the progress table
                 toggleTablesWithAnimation(false);
+            });
+
+            $(document).ready(function () {
+              $('#tb').DataTable();
+            });
+
+            $(document).ready(function () {
+              $('#tb2').DataTable();
+            });
+
+            $(document).ready(function () {
+              $('#tb3').DataTable();
             });
         </script>
     {% endif %}

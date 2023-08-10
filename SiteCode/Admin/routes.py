@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from pandas import read_excel
-from SiteCode.models import SalesPerson
+from SiteCode.models import SalesPerson, Progress
 from SiteCode.Admin.forms import UploadForm
-import os
 import pandas as pd
+from sqlalchemy import or_
 
 admin = Blueprint("admin", __name__)
 
@@ -35,7 +35,6 @@ def setup():
     return redirect(url_for('admin.partner_admin'))
 
 
-
 @login_required
 @admin.route('/partneradmincustomer')
 def customer_table():
@@ -61,7 +60,6 @@ def process_table_customer(company):
         data2 = None
         active2 = "All"
     return redirect(url_for('admin.customer_table'))
-
 
 
 @login_required
@@ -139,3 +137,20 @@ def upload():
         height = "85vh" if request.method == "POST" else "75vh"
 
     return render_template('upload.html', form=form, height=height)
+
+
+def create_summary_table():
+    usernames = SalesPerson.query.filter(
+        (SalesPerson.role != 2) &
+        (SalesPerson.progresses.any()) &
+        (SalesPerson.partner.any()) &
+        (SalesPerson.entity.in_(current_user.companies_available.split(',')))
+    ).all()
+    summary_data = []
+    for user in usernames:
+        communication_count = Progress.query.filter_by(salesperson=user,
+                                                       conversation="We both have communicated").count()
+        partner_names = [partner.name for partner in user.partner]
+        live_status = any(original_data2['Carrier'].str.contains('|'.join(partner_names), case=False, na=False))
+        summary_data.append((user.username, communication_count, live_status))
+    return summary_data

@@ -31,4 +31,5 @@ class UpdatePartnerForm(FlaskForm):
 class AdminUpdatesForm(FlaskForm):
     daily = StringField('Daily Message', validators=[Length(0, 50)])
     content = TextAreaField('Content', validators=[Length(0, 400)])
+    company = SelectField("Message for Company", choices=["Choose..."])
     submit = SubmitField("Send")

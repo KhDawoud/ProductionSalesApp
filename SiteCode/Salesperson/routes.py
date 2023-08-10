@@ -6,6 +6,7 @@ from SiteCode import db, bcrypt
 from flask_login import login_user, login_required, current_user, logout_user
 from SiteCode.models import SalesPerson, Progress, Partner
 from SiteCode.Salesperson.forms import LoginForm, UpdateProgressForm, RegisterForm
+from SiteCode.Admin.routes import create_summary_table
 
 sales_person = Blueprint("sales", __name__)
 
@@ -104,6 +105,8 @@ def update_progress():
 def view_info(active):
     a = "" if active == "Progress" else "d-none"
     b = "" if active == "Partners" else "d-none"
+    summary = None
+
     if current_user.entity in ["Acepeak", "TechOpen", "Letsdial", "Teloz", "Rosper"]:
         c = "btn-danger" if not a else "btn-outline-danger"
         d = "btn-danger" if not b else "btn-outline-danger"
@@ -116,18 +119,20 @@ def view_info(active):
     if current_user.role == 2:
         comp = current_user.companies_available.split(',')
         p_list = Partner.query.filter(Partner.entity.in_(comp)).all()
+        p_count = Progress.query.filter_by(conversation="We both have communicated").count()
         prog = [s.progresses for s in SalesPerson.query.filter(SalesPerson.entity.in_(comp)).all()]
         prog = reversed([item for sublist in prog for item in sublist])
+        summary = create_summary_table()
     else:
         p_list = Partner.query.filter_by(entity=current_user.entity).all()
         prog = reversed(current_user.progresses)
     return render_template('view_info.html', headings=["Username", "Date", "Company Name",
                                                        "Country", "Communication",
                                                        "SalesPerson BPO", "Name Call",
-                                                       "Conversation"], p_headings=["Partner Name", "Date",
+                                                       "Conversation"], p_headings=["Username", "Name Call", "Partner Name", "Date",
                                                                                     "Email ID", "Skype ID", "Type",
                                                                                     "Destinations"],
-                           progress=prog, user=current_user, partner=p_list, a=a, b=b, c=c, d=d, colour=colour)
+                           progress=prog, user=current_user, partner=p_list, a=a, b=b, c=c, d=d, colour=colour, summary=summary)
 
 
 @login_required
