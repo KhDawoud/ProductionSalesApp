@@ -8,9 +8,9 @@ from sqlalchemy import or_
 
 admin = Blueprint("admin", __name__)
 
-original_data = read_excel(r'SiteCode/Live Data/vendor.xlsx')
+original_data = read_excel(r'SiteCode\Live Data\vendor.xlsx')
 original_data = original_data[original_data["Cost"] > 0]
-original_data2 = read_excel(r'SiteCode/Live Data/customer.xlsx')
+original_data2 = read_excel(r'SiteCode\Live Data\customer.xlsx')
 original_data2 = original_data2[original_data2["Revenue"] > 0]
 data = None
 data2 = None
