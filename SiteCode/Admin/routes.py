@@ -108,7 +108,7 @@ def upload():
                     df = pd.read_csv(customer_file, encoding='utf-8')
                 except UnicodeDecodeError:
                     df = pd.read_csv(customer_file, encoding='latin-1')
-                df.to_excel(r"C:\Users\Admin\Desktop\SalesApp\SiteCode\Live Data\customer.xlsx", index=False)
+                df.to_excel(r"SiteCode\Live Data\customer.xlsx", index=False)
 
         if form.vendor.data:
             vendor_file = form.vendor.data
@@ -117,7 +117,7 @@ def upload():
                     df = pd.read_csv(vendor_file, encoding='utf-8')
                 except UnicodeDecodeError:
                     df = pd.read_csv(vendor_file, encoding='latin-1')
-                df.to_excel(r"C:\Users\Admin\Desktop\SalesApp\SiteCode\Live Data\vendor.xlsx", index=False)
+                df.to_excel(r"SiteCode\Live Data\vendor.xlsx", index=False)
 
         if form.leads.data:
             leads_file = form.leads.data
@@ -126,7 +126,7 @@ def upload():
                     df = pd.read_csv(leads_file, encoding='utf-8')
                 except UnicodeDecodeError:
                     df = pd.read_csv(leads_file, encoding='latin-1')
-                df.to_excel(r"C:\Users\Admin\Desktop\SalesApp\SiteCode\Live Data\leads.xlsx", index=False)
+                df.to_excel(r"SiteCode\Live Data\leads.xlsx", index=False)
 
         if not any([form.customer.data, form.vendor.data, form.leads.data]):
             form.leads.errors.append("At least one field must be entered")

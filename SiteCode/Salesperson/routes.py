@@ -10,7 +10,7 @@ from SiteCode.Admin.routes import create_summary_table
 
 sales_person = Blueprint("sales", __name__)
 
-data = pandas.read_excel(r"C:\Users\Admin\Desktop\SalesApp\SiteCode\Live Data\leads.xlsx")
+data = pandas.read_excel(r"SiteCode\Live Data\leads.xlsx")
 
 
 @sales_person.route('/register', methods=["POST", "GET"])
@@ -146,7 +146,7 @@ def logout():
 @sales_person.route('/viewleads')
 def view_leads():
     global data
-    data = pandas.read_excel(r"C:\Users\Admin\Desktop\SalesApp\SiteCode\Live Data\leads.xlsx")
+    data = pandas.read_excel(r"SiteCode\Live Data\leads.xlsx")
     colour = "danger" if current_user.entity in ["Acepeak", "TechOpen", "Letsdial", "Teloz",
                                                  "Rosper"] else "primary"
     if not current_user.lead:
@@ -164,7 +164,7 @@ def process_leads(info):
     global data
     current_user.lead = info
     data = data[data["Name"] != info.split()[0]]
-    data.to_excel(r"C:\Users\Admin\Desktop\SalesApp\SiteCode\Live Data\leads.xlsx")
+    data.to_excel(r"SiteCode\Live Data\leads.xlsx")
     db.session.commit()
     flash("Lead Chosen Succesfully")
     return redirect(url_for('main.home'))
@@ -185,7 +185,7 @@ def lead_change():
     info = current_user.lead.split()
     new_row = {'Name': info[0], 'Contact': info[1]}
     data.loc[len(data)] = new_row
-    data.to_excel(r"C:\Users\Admin\Desktop\SalesApp\SiteCode\Live Data\leads.xlsx")
+    data.to_excel(r"SiteCode\Live Data\leads.xlsx")
     current_user.lead = None
     db.session.commit()
     return redirect(url_for('main.home'))
