@@ -22,6 +22,7 @@
                         <form method="POST" class="form-group" enctype="multipart/form-data" novalidate>
                             {{ form.csrf_token }}
                             <label class="form-label"> {{ form.customer.label }} </label>
+                            <small class="text-muted"> Columns: Carrier, Country, Revenue</small>
                             {% if form.customer.errors %}
                                 {{ form.customer(class="form-control shadow is-invalid") }}
                                 {% for error in form.customer.errors %}
@@ -34,6 +35,7 @@
                             {% endif %}
 
                             <label class="form-label"> {{ form.vendor.label }} </label>
+                            <small class="text-muted"> Columns: Carrier, Country, Cost</small>
                             {% if form.vendor.errors %}
                                 {{ form.vendor(class="form-control shadow is-invalid") }}
                                 {% for error in form.vendor.errors %}
@@ -46,6 +48,7 @@
                             {% endif %}
 
                             <label class="form-label"> {{ form.leads.label }} </label>
+                            <small class="text-muted"> Columns: Name, Contact</small>
                             {% if form.leads.errors %}
                                 {{ form.leads(class="form-control shadow is-invalid") }}
                                 {% for error in form.leads.errors %}

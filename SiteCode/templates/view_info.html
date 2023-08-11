@@ -5,7 +5,11 @@
 {% block content %}
 <body>
     <div class="row px-5 pt-5 text-center">
-        <h5 class="text-{{colour}}"> Data For {{ user.entity }}</h5>
+        {% if user.username == "Admin 1" %}
+            <h5 class="text-{{colour}}">Data for all entities</h5>
+        {% else %}
+            <h5 class="text-{{colour}}"> Data For {{ user.entity }}</h5>
+        {% endif %}
         <h1>View Your Current Progress</h1>
     </div>
     <div class="row text-center m-3">

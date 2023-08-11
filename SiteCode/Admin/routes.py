@@ -95,6 +95,7 @@ def partner_admin():
 @admin.route('/upload', methods=["POST", "GET"])
 @login_required
 def upload():
+    global original_data, original_data2
     if current_user.role != 2:
         return redirect(url_for('main.home'))
     form = UploadForm()
@@ -109,7 +110,11 @@ def upload():
                 except UnicodeDecodeError:
                     df = pd.read_csv(customer_file, encoding='latin-1')
                 df.to_excel(r"SiteCode/Live Data/customer.xlsx", index=False)
-
+            else:
+                df = pd.read_excel(customer_file)
+                df.to_excel(r"SiteCode/Live Data/customer.xlsx", index=False)
+            original_data2 = pd.read_excel(r"SiteCode/Live Data/customer.xlsx")
+            original_data2 = original_data2[original_data2["Revenue"] > 0]
         if form.vendor.data:
             vendor_file = form.vendor.data
             if vendor_file.filename.lower().endswith('.csv'):
@@ -118,6 +123,11 @@ def upload():
                 except UnicodeDecodeError:
                     df = pd.read_csv(vendor_file, encoding='latin-1')
                 df.to_excel(r"SiteCode/Live Data/vendor.xlsx", index=False)
+            else:
+                df = pd.read_excel(vendor_file)
+                df.to_excel(r"SiteCode/Live Data/vendor.xlsx", index=False)
+            original_data = pd.read_excel(r"SiteCode/Live Data/vendor.xlsx")
+            original_data = original_data[original_data["Cost"] > 0]
 
         if form.leads.data:
             leads_file = form.leads.data
@@ -126,6 +136,9 @@ def upload():
                     df = pd.read_csv(leads_file, encoding='utf-8')
                 except UnicodeDecodeError:
                     df = pd.read_csv(leads_file, encoding='latin-1')
+                df.to_excel(r"SiteCode/Live Data/leads.xlsx", index=False)
+            else:
+                df = pd.read_excel(leads_file)
                 df.to_excel(r"SiteCode/Live Data/leads.xlsx", index=False)
 
         if not any([form.customer.data, form.vendor.data, form.leads.data]):
