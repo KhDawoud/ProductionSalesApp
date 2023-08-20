@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_required, current_user
 from pandas import read_excel
 from SiteCode.models import SalesPerson, Progress
 from SiteCode.Admin.forms import UploadForm
+from SiteCode import csrf
 import pandas as pd
 from sqlalchemy import or_
 
@@ -167,3 +168,29 @@ def create_summary_table():
         live_status = any(original_data2['Carrier'].str.contains('|'.join(partner_names), case=False, na=False))
         summary_data.append((user.username, communication_count, live_status))
     return summary_data
+
+
+@admin.route('/api/add_data', methods=["POST"])
+@csrf.exempt
+def add_data():
+    new_leads_data = request.json
+    df = pd.read_excel("SiteCode/Live Data/leads.xlsx")
+    try:
+        for lead in new_leads_data:
+            name = lead[0]
+            contact = lead[1]
+            if (not (df[(df["Name"] == name) & (df["Contact"] == contact)].shape[0] > 0)) and \
+                    (not SalesPerson.query.filter_by(lead=f"{name}, {contact}").first()):
+                df.loc[len(df.index)] = [name, contact]
+        df.to_excel("SiteCode/Live Data/leads.xlsx", index=False)
+    except Exception:
+        return jsonify({'message': 'Failed to add data'}), 400
+    return jsonify({"message": "Success"}), 200
+
+
+@admin.route('/viewleadsadmin')
+def view_admin_leads():
+    df = pd.read_excel("SiteCode/Live Data/leads.xlsx")
+    chosen = SalesPerson.query.filter(SalesPerson.lead.isnot(None)).all()
+    return render_template('leads_admin.html', unchosen=df, chosen=chosen, headings=["Name", "Contact Information",
+                                                                                     "Selected by"])

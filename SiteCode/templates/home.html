@@ -37,9 +37,11 @@
                   <li><a class="dropdown-item" href="/viewinfo/Partners">Partners</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="/viewinfo/Progress">Progress</a></li>
+                  <li><hr class="dropdown-divider"></li>
                   {% if current_user.role != 2 %}
-                    <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="/viewleads">Leads</a></li>
+                  {% else %}
+                    <li><a class="dropdown-item" href="/viewleadsadmin">Leads</a></li>
                   {% endif %}
                 </ul>
               </li>
