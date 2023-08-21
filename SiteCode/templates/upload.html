@@ -48,7 +48,7 @@
                             {% endif %}
 
                             <label class="form-label"> {{ form.leads.label }} </label>
-                            <small class="text-muted"> Columns: Name, Contact</small>
+                            <small class="text-muted"> Columns: Name, Contact, Website</small>
                             {% if form.leads.errors %}
                                 {{ form.leads(class="form-control shadow is-invalid") }}
                                 {% for error in form.leads.errors %}

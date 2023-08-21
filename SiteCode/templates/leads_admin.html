@@ -36,13 +36,21 @@
                     <tr>
                         <td> {{ row["Name"] }} </td>
                         <td> {{ row["Contact"] }} </td>
+                        <td> {{ row["Website"] }}</td>
                         <td> None </td>
+                        <td> <a href="deleteleads/{{ row['Name'] }},{{ row['Contact'] }}" class="btn btn-dark"><svg xmlns="http://www.w3.org/2000/svg" height="1em" width="1.5em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></a> </td>
                     </tr>
                 {% endfor %}
 
             </tbody>
         </table>
+        <div class="row mt-4">
+            <a class="btn btn-success col-5" href="/download/excel">Export to Excel</a>
+            <div class="col-2"></div>
+            <a class="btn btn-secondary col-5" href="/download/csv">Export to CSV</a>
+        </div>
     </div>
+
 
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>

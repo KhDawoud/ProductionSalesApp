@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
+import os
+
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, send_file
 from flask_login import login_required, current_user
 from pandas import read_excel
 from SiteCode.models import SalesPerson, Progress
@@ -179,18 +181,49 @@ def add_data():
         for lead in new_leads_data:
             name = lead[0]
             contact = lead[1]
+            website = lead[2]
             if (not (df[(df["Name"] == name) & (df["Contact"] == contact)].shape[0] > 0)) and \
                     (not SalesPerson.query.filter_by(lead=f"{name}, {contact}").first()):
-                df.loc[len(df.index)] = [name, contact]
+                df.loc[len(df.index)] = [name, contact, website]
         df.to_excel("SiteCode/Live Data/leads.xlsx", index=False)
     except Exception:
         return jsonify({'message': 'Failed to add data'}), 400
     return jsonify({"message": "Success"}), 200
 
 
+@login_required
 @admin.route('/viewleadsadmin')
 def view_admin_leads():
+    if current_user.role != 2:
+        return redirect(url_for('main.home'))
     df = pd.read_excel("SiteCode/Live Data/leads.xlsx")
     chosen = SalesPerson.query.filter(SalesPerson.lead.isnot(None)).all()
     return render_template('leads_admin.html', unchosen=df, chosen=chosen, headings=["Name", "Contact Information",
-                                                                                     "Selected by"])
+                                                                                     "Website", "Selected by", "Delete"])
+
+
+@admin.route('/download/<string:file_type>')
+def download(file_type):
+    if current_user.role != 2:
+        return redirect(url_for('main.home'))
+    match file_type:
+        case "excel":
+            return send_file("Live Data/leads.xlsx", as_attachment=True)
+        case "csv":
+            excel_data = pd.read_excel("SiteCode/Live Data/leads.xlsx")
+            excel_data.to_csv('SiteCode/Live Data/leads.csv', index=False)
+            response = send_file('Live Data/leads.csv', as_attachment=True, download_name='leads.csv')
+            return response
+
+
+@admin.route('/deleteleads/<string:info>')
+@login_required
+def delete_leads(info):
+    name, contact = info.split(',')
+    df = pd.read_excel("SiteCode/Live Data/leads.xlsx")
+    index_to_delete = df[(df["Name"] == name) & (df["Contact"] == contact)].index
+    df.drop(index_to_delete, inplace=True)
+    df.to_excel("SiteCode/Live Data/leads.xlsx", index=False)
+    return redirect(url_for('admin.view_admin_leads'))
+
+

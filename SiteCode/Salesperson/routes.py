@@ -152,7 +152,7 @@ def view_leads():
     if not current_user.lead:
         new_data = data.sample(n=10) if len(data) >= 10 else data
         return render_template('leads.html', data=new_data, colour=colour, user=current_user,
-                               headings=["Name", "Contact Information"])
+                               headings=["Name", "Contact Information", "Website"])
     else:
         return render_template('lead_chosen.html', user=current_user, colour=colour,
                                headings=["Name", "Contact Information"])
