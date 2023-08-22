@@ -1,6 +1,7 @@
 import datetime
 import re
 import pandas
+import pandas as pd
 from flask import Blueprint, render_template, url_for, redirect, request, flash
 from SiteCode import db, bcrypt
 from flask_login import login_user, login_required, current_user, logout_user
@@ -163,7 +164,12 @@ def view_leads():
 def process_leads(info):
     global data
     current_user.lead = info
-    data = data[data["Name"] != info.split()[0]]
+    name, contact = info.split('~')
+    choose = pandas.read_excel(r"SiteCode/Live Data/chosen.xlsx")
+    choose.loc[len(choose)] = {"ID": current_user.id,
+                               "Website": data[(data["Name"] == name) & (data["Contact"] == contact)]["Website"].iloc[0]}
+    choose.to_excel(r"SiteCode/Live Data/chosen.xlsx")
+    data = data[(data["Name"] != name) & (data['Contact'] != contact)]
     data.to_excel(r"SiteCode/Live Data/leads.xlsx")
     db.session.commit()
     flash("Lead Chosen Succesfully")
@@ -174,6 +180,10 @@ def process_leads(info):
 @sales_person.route('/leadcomplete')
 def lead_complete():
     current_user.lead = None
+    choose = pandas.read_excel(r"SiteCode/Live Data/chosen.xlsx")
+    del_index = choose[choose["ID"] == current_user.id].index
+    choose.drop(del_index, inplace=True)
+    choose.to_excel(r"SiteCode/Live Data/chosen.xlsx", index=False)
     db.session.commit()
     return redirect(url_for('main.home'))
 
@@ -182,8 +192,12 @@ def lead_complete():
 @sales_person.route('/leadchange')
 def lead_change():
     global data
-    info = current_user.lead.split()
-    new_row = {'Name': info[0], 'Contact': info[1]}
+    name, contact = current_user.lead.split('~')
+    choose = pandas.read_excel(r"SiteCode/Live Data/chosen.xlsx")
+    new_row = {'Name': name, 'Contact': contact, 'Website': choose[choose["ID"] == current_user.id]["Website"].iloc[0]}
+    del_index = choose[choose["ID"] == current_user.id].index
+    choose.drop(del_index, inplace=True)
+    choose.to_excel(r"SiteCode/Live Data/chosen.xlsx", index=False)
     data.loc[len(data)] = new_row
     data.to_excel(r"SiteCode/Live Data/leads.xlsx")
     current_user.lead = None

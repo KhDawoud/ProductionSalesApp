@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 {% for i, row in data.iterrows() %}
-                    <tr onclick="redirectToURL('/processleads/{{ row["Name"] }},{{ row["Contact"] }}')">
+                    <tr onclick="redirectToURL('/processleads/{{ row['Name'] }}~{{ row['Contact'] }}')">
                         <td> {{ row["Name"] }} </td>
                         <td> {{ row["Contact"] }} </td>
                         <td> {{ row["Website"] }} </td>

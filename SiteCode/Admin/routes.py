@@ -219,7 +219,7 @@ def download(file_type):
 @admin.route('/deleteleads/<string:info>')
 @login_required
 def delete_leads(info):
-    name, contact = info.split(',')
+    name, contact = info.split('~')
     df = pd.read_excel("SiteCode/Live Data/leads.xlsx")
     index_to_delete = df[(df["Name"] == name) & (df["Contact"] == contact)].index
     df.drop(index_to_delete, inplace=True)
